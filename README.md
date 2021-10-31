@@ -12,6 +12,8 @@ A plugin that randomize things for Adobe Illustrator
 ## To Do
 
 * Convert it to a panel instead of a popup.
-* when using a random color in a swatch, keep the swatch selected
+* Keep the swatch selected when using a random color in a swatch.
+* Make it able to explore groups.
+* Make the cancel button a cancel button (not just a close-window button)
 
 Fell free to contribute to this project ! I'll keep things updated on the main branch.
