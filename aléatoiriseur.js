@@ -6,14 +6,15 @@ function nombre_random(min,max){
 }
 
 function random_background_color(){
-	let selSwatches = MyDoc.swatches.getSelected();
+	selSwatches = MyDoc.swatches.getSelected();
 	
 	if(selSwatches.length != 0){
-		for (let SelectedItem of MySelection) {
+		for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
 			if(SelectedItem.typename == "PathItem" || SelectedItem.typename == "CompoundPathItem"){
 				SelectedItem.filled = true;
 
-				let swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));
+				swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));
 				
 				if(SelectedItem.typename == "PathItem")
 					SelectedItem.fillColor = selSwatches[swatchIndex].color;
@@ -25,14 +26,15 @@ function random_background_color(){
 }
 
 function random_stroke_color(){
-	let selSwatches = MyDoc.swatches.getSelected();
+	selSwatches = MyDoc.swatches.getSelected();
 	
 	if(selSwatches.length != 0){
-		for (let SelectedItem of MySelection) {
+		for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
 			if(SelectedItem.typename == "PathItem" || SelectedItem.typename == "CompoundPathItem"){
 				SelectedItem.stroked = true;
 
-				let swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));
+				swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));
 				
 				if(SelectedItem.typename == "PathItem")
 					SelectedItem.strokeColor = selSwatches[swatchIndex].color;
@@ -45,88 +47,94 @@ function random_stroke_color(){
 
 function random_opacite(op_min,op_max){
 	if(op_min > op_max){
-		let temp = op_min;
+		temp = op_min;
 		op_min = op_max;
 		op_max = temp;
 	}
 	op_min = Math.max(0,op_min)
 	op_max = Math.min(100,op_max)
 
-	for (let SelectedItem of MySelection) {
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
 		SelectedItem.opacity = nombre_random(op_min,op_max);
 	}
 }
 
 function random_redimension(redim_min,redim_max){
 	if(redim_min > redim_max){
-		let temp = redim_min;
+		temp = redim_min;
 		redim_min = redim_max;
 		redim_max = temp;
 	}
 
-	for (let SelectedItem of MySelection) {
-		let facteur_redim = nombre_random(redim_min,redim_max);
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
+		facteur_redim = nombre_random(redim_min,redim_max);
 		SelectedItem.resize(facteur_redim, facteur_redim);
 	}
 }
 
 function random_rotation(rot_min,rot_max){
 	if(rot_min > rot_max){
-		let temp = rot_min;
+		temp = rot_min;
 		rot_min = rot_max;
 		rot_max = temp;
 	}
 
-	for (let SelectedItem of MySelection) {
-		let rotation = nombre_random(rot_min,rot_max);
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
+		rotation = nombre_random(rot_min,rot_max);
 		SelectedItem.rotate(rotation, rotation);
 	}
 }
 
 function random_stroke_weight(ep_min,ep_max){
 	if(ep_min > ep_max){
-		let temp = ep_min;
+		temp = ep_min;
 		ep_min = ep_max;
 		ep_max = temp;
 	}
 
-	for (let SelectedItem of MySelection) {
-		let epaisseur = nombre_random(ep_min,ep_max);
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
+		epaisseur = nombre_random(ep_min,ep_max);
 		SelectedItem.strokeWidth = epaisseur;
 	}
 }
 
 function random_translation(x_min,x_max,y_min,y_max){
 	if(x_min > x_max){
-		let temp = x_min;
+		temp = x_min;
 		x_min = x_max;
 		x_max = temp;
 	}
 	if(y_min > y_max){
-		let temp = y_min;
+		temp = y_min;
 		y_min = y_max;
 		y_max = temp;
 	}
 
-	for (let SelectedItem of MySelection) {
-		let translation_x = nombre_random(x_min,x_max);
-		let translation_y = nombre_random(y_min,y_max);
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
+		translation_x = nombre_random(x_min,x_max);
+		translation_y = nombre_random(y_min,y_max);
 		SelectedItem.translate(translation_x,translation_y);
 	}
 }
 
 function random_order(){
-	for(let i=0; i<MySelection.length; i++){
-		let indice = Math.floor(Math.random()*(MySelection.length - i));
+	for(i=0; i<MySelection.length; i++){
+			SelectedItem = MySelection[i];
+		indice = Math.floor(Math.random()*(MySelection.length - i));
 		MySelection[indice].zOrder(ZOrderMethod.SENDTOBACK);
 	}
 }
 
 function random_selection(pourcentage){
 	var nbr_objet_a_deselectionner = Math.round(MySelection.length * (1 - pourcentage / 100));
-	let selection_courante = MySelection;
-	for(let i=0; i<nbr_objet_a_deselectionner; i++){
-		let indice = Math.floor(Math.random()*(selection_courante.length - i));
+	selection_courante = MySelection;
+	for(i=0; i<nbr_objet_a_deselectionner; i++){
+		indice = Math.floor(Math.random()*(selection_courante.length - i));
 		selection_courante[indice].selected = false;
 		selection_courante = MyDoc.selection;
 	}
@@ -443,31 +451,31 @@ var dialogUI = (function () {
 	tpanel1.selection = tab_rotation;
 
 	button1.addEventListener("click",function(){
-		let tab_selectionnee = tpanel1.selection
+		tab_selectionnee = tpanel1.selection
 		if(tab_selectionnee == tab_rotation){
-			let min_rotation = parseInt(edittext1.text)
-			let max_rotation = parseInt(edittext2.text)
+			min_rotation = parseInt(edittext1.text)
+			max_rotation = parseInt(edittext2.text)
 			random_rotation(min_rotation,max_rotation)
 		} else if(tab_selectionnee == tab_redimension){
-			let min_redim = parseInt(edittext3.text)
-			let max_redim = parseInt(edittext4.text)
+			min_redim = parseInt(edittext3.text)
+			max_redim = parseInt(edittext4.text)
 			random_redimension(min_redim,max_redim)
 		} else if(tab_selectionnee == tab_epaisseur){
-			let min_ep = parseInt(edittext5.text)
-			let max_ep = parseInt(edittext6.text)
+			min_ep = parseInt(edittext5.text)
+			max_ep = parseInt(edittext6.text)
 			random_stroke_weight(min_ep,max_ep)
 		} else if(tab_selectionnee == tab_opacite){
-			let min_op = parseInt(edittext7.text)
-			let max_op = parseInt(edittext8.text)
+			min_op = parseInt(edittext7.text)
+			max_op = parseInt(edittext8.text)
 			random_opacite(min_op,max_op)
 		} else if(tab_selectionnee == tab_position){
-			let min_x = parseInt(edittext9.text)
-			let max_x = parseInt(edittext10.text)
-			let min_y = parseInt(edittext11.text)
-			let max_y = parseInt(edittext12.text)
+			min_x = parseInt(edittext9.text)
+			max_x = parseInt(edittext10.text)
+			min_y = parseInt(edittext11.text)
+			max_y = parseInt(edittext12.text)
 			random_translation(min_x,max_x,min_y,max_y)
 		} else if(tab_selectionnee == tab_selection){
-			let pourcentage = parseInt(edittext7.text)
+			pourcentage = parseInt(edittext7.text)
 			random_selection(pourcentage)
 		} else if(tab_selectionnee == tab_ordre){
 			random_order()
