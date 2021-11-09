@@ -17,3 +17,10 @@ A plugin that randomize things for Adobe Illustrator
 * Make the cancel button a cancel button (not just a close-window button)
 
 Fell free to contribute to this project ! I'll keep things updated on the main branch.
+
+## V1.1
+* Better UI
+* Random Selection fixed
+* Function simplification
+* Translated everything to english
+* Cancel Button closes the dialog
