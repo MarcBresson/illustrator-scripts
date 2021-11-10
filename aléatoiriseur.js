@@ -1,118 +1,119 @@
-MyDoc = app.activeDocument;
-MySelection = MyDoc.selection;
-
-function nombre_random(min,max){
-	return  Math.floor(Math.random() * (max - min + 1)) + min;
-}
+#targetengine "main"
 
 function random_color(type){
-	selSwatches = MyDoc.swatches.getSelected();
-	if(selSwatches.length != 0){
-		for(i=0; i<MySelection.length; i++){
-			SelectedItem = MySelection[i];
-			if(SelectedItem.typename == "PathItem" || SelectedItem.typename == "CompoundPathItem"){
-				swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));
+	var script = 'selSwatches = MyDoc.swatches.getSelected();\n'+
+'type = "'+type+'";\n'+
+'	if(selSwatches.length != 0){\n'+
+'		for(i=0; i<MySelection.length; i++){\n'+
+'			SelectedItem = MySelection[i];\n'+
+'			if(SelectedItem.typename == "PathItem" || SelectedItem.typename == "CompoundPathItem"){\n'+
+'				swatchIndex = Math.round( Math.random() * (selSwatches.length - 1 ));\n'+
 
-				if (type == "fill"){
-					SelectedItem.filled = true;
-					if(SelectedItem.typename == "PathItem")
-						SelectedItem.fillColor = selSwatches[swatchIndex].color;
-					else
-						SelectedItem.pathItems[0].fillColor = selSwatches[swatchIndex].color;
-				} 
+'			if (type == "fill"){\n'+
+'				SelectedItem.filled = true;\n'+
+'				if(SelectedItem.typename == "PathItem"){\n'+
+'					SelectedItem.fillColor = selSwatches[swatchIndex].color;\n'+
+'					} else {\n'+
+'						SelectedItem.pathItems[0].fillColor = selSwatches[swatchIndex].color;\n'+
+'					}\n'+
+'				} \n'+
 
-				else if (type == "stroke"){
-					SelectedItem.stroked = true;
-					if(SelectedItem.typename == "PathItem")
-						SelectedItem.strokeColor = selSwatches[swatchIndex].color;
-					else
-						SelectedItem.pathItems[0].strokeColor = selSwatches[swatchIndex].color;
-				}
-			}
-		}
-	}
+'				else if (type == "stroke"){\n'+
+'					SelectedItem.stroked = true;\n'+
+'					if(SelectedItem.typename == "PathItem")\n'+
+'						SelectedItem.strokeColor = selSwatches[swatchIndex].color;\n'+
+'					else\n'+
+'						SelectedItem.pathItems[0].strokeColor = selSwatches[swatchIndex].color;\n'+
+'				}\n'+
+'			}\n'+
+'		}\n'+
+'	}\n'
+	return script
 }
 
-function random_two_factor(type, minimum, maximum, min_minimum=undefined, max_maximum=undefined){
-	if(minimum > maximum){
+function random_two_factor(type, minimum, maximum, min_minimum, max_maximum){
+if(minimum > maximum){
 		temp = minimum;
 		minimum = maximum;
 		maximum = temp;
 	}
 	if (min_minimum != undefined){
-		minimum = Math.min(minimum, min_minimum)
+		minimum = Math.min(minimum, min_minimum);
 	}
 	if (max_maximum != undefined){
-		maximum = Math.max(maximum, min_maximum)
+		maximum = Math.max(maximum, max_maximum);
 	}
 
-	for (var i = 0; i < MySelection.length; i++){
-		SelectedItem = MySelection[i];
-		nbr_random = nombre_random(minimum, maximum)
-
-		if(type = "opacity"){
-			SelectedItem.opacity = nombre_random(op_min,op_max);
-		} else if (type = "resize"){
-			SelectedItem.resize(nbr_random, nbr_random);
-		} else if (type = "rotation"){
-			SelectedItem.rotate(nbr_random, nbr_random);
-		} else if (type = "stroke_weight"){
-			SelectedItem.strokeWidth = nbr_random;
-		}
-	}
-
+	var script = 
+'type = "'+type+'"\n'+
+'for (var i = 0; i < MySelection.length; i++){\n'+
+'	SelectedItem = MySelection[i];\n'+
+'	nbr_random = nombre_random('+minimum+', '+maximum+');\n'+
+'		if(type == "opacity"){\n'+
+'		SelectedItem.opacity = nombre_random(nbr_random,nbr_random);\n'+
+'	} else if (type == "resize"){\n'+
+'		SelectedItem.resize(nbr_random, nbr_random);\n'+
+'	} else if (type == "rotation"){\n'+
+'		SelectedItem.rotate(nbr_random, nbr_random);\n'+
+'	} else if (type == "stroke_weight"){\n'+
+'		SelectedItem.strokeWidth = nbr_random;\n'+
+'	}\n'+
+'}\n'
+	return script
 }
 
 function random_translation(x_min,x_max,y_min,y_max){
-	if(x_min > x_max){
-		temp = x_min;
-		x_min = x_max;
-		x_max = temp;
-	}
-	if(y_min > y_max){
-		temp = y_min;
-		y_min = y_max;
-		y_max = temp;
-	}
+	var script = 'if(x_min > x_max){\n'+
+'	temp = x_min;\n'+
+'	x_min = x_max;\n'+
+'	x_max = temp;\n'+
+'}\n'+
+'if(y_min > y_max){\n'+
+'	temp = y_min;\n'+
+'	y_min = y_max;\n'+
+'	y_max = temp;\n'+
+'}\n'+
 
-	for(i=0; i<MySelection.length; i++){
-			SelectedItem = MySelection[i];
-		translation_x = nombre_random(x_min,x_max);
-		translation_y = nombre_random(y_min,y_max);
-		SelectedItem.translate(translation_x,translation_y);
-	}
+'for(i=0; i<MySelection.length; i++){\n'+
+'	SelectedItem = MySelection[i];\n'+
+'	translation_x = nombre_random(x_min,x_max);\n'+
+'	translation_y = nombre_random(y_min,y_max);\n'+
+'	SelectedItem.translate(translation_x,translation_y);\n'+
+'}'
+	return script
 }
 
 function random_order(){
-	for(i=0; i<MySelection.length; i++){
-			SelectedItem = MySelection[i];
-		indice = Math.floor(Math.random()*(MySelection.length - i));
-		MySelection[indice].zOrder(ZOrderMethod.SENDTOBACK);
-	}
+	var script = 'for(i=0; i<MySelection.length; i++){\n'+
+'	SelectedItem = MySelection[i];\n'+
+'	indice = Math.floor(Math.random()*(MySelection.length - i));\n'+
+'	MySelection[indice].zOrder(ZOrderMethod.SENDTOBACK);\n'+
+'}\n'
+	return script
 }
 
 function random_selection(pourcentage){
-	var nbr_items_to_deselect = Math.round(MySelection.length * (pourcentage / 100));
-	var items_to_deselect = [];
-	for (var i = 0; i < MySelection.length; i++) {
-		items_to_deselect.push(i);
-	}
-	while (items_to_deselect.length > nbr_items_to_deselect){
-		index = Math.floor(Math.random()*(items_to_deselect.length));
-		items_to_deselect.slice(index, 1);
-	}
-	for(i = items_to_deselect.length; i >= 0 ; i ++){
-		MySelection[items_to_deselect[i]].select = false;
-	}
+	var script = 'var nbr_items_to_deselect = Math.round(MySelection.length * (1 - '+pourcentage+' / 100));\n'+
+'var items_to_deselect = [];\n'+
+'for (var i = 0; i < MySelection.length; i++) {\n'+
+'	items_to_deselect.push(i);\n'+
+'}\n'+
+'while (items_to_deselect.length > nbr_items_to_deselect){\n'+
+'	index = Math.floor(Math.random()*(items_to_deselect.length));\n'+
+'	items_to_deselect.splice(index, 1);\n'+
+'}\n'+
+'for(i = items_to_deselect.length-1; i >= 0 ; i --){\n'+
+'	MySelection[items_to_deselect[i]].selected = false;\n'+
+'}\n'
+	return script
 }
-
 
 
 var dialogUI = (function () {
 
 	// PALETTE
 	// =======
-	var palette = new Window("dialog", undefined, undefined, {closeButton: true, resizeable: true}); 
+	var palette = new Window("palette", undefined, undefined, {closeButton: true, resizeable: true}); 
 	palette.text = "aleatoiriseur"; 
 	palette.alignChildren = ["center","top"]; 
 	palette.spacing = 10; 
@@ -298,8 +299,8 @@ var dialogUI = (function () {
 	// ============
 	var group_button = palette.add("group", undefined, {name: "group_button"});
 
-	var cancel = group_button.add("button", undefined, undefined, {name: "cancel"}); 
-	cancel.text = "cancel"; 
+	var close = group_button.add("button", undefined, undefined, {name: "close"}); 
+	close.text = "close"; 
 
 	var apply = group_button.add("button", undefined, undefined, {name: "apply"}); 
 	apply.text = "apply"; 
@@ -343,53 +344,64 @@ var dialogUI = (function () {
 	tabpanel_nav.selection = 0; 
 	showTab_tabpanel() 
 
-	cancel.addEventListener("click",function(){
+	close.addEventListener("click",function(){
 		palette.close();
 	});
 
 	apply.addEventListener("click",function(){
+		var bt = new BridgeTalk;
+		bt.target = "illustrator";
+
+		script = "MyDoc = app.activeDocument;\n"+
+		"MySelection = MyDoc.selection;\n\n"+
+		"function nombre_random(min,max){\n"+
+		"	return  Math.floor(Math.random() * (max - min + 1)) + min;\n"+
+		"}\n\n"
+
 		if(tab_selectionnee == tab_rotation){
 			min_rotation = parseInt(edit_min_rot.text)
 			max_rotation = parseInt(edit_max_rot.text)
-			random_two_factor("rotation",min_rotation,max_rotation)
+			script += random_two_factor("rotation",min_rotation,max_rotation)
 		}
 		else if(tab_selectionnee == tab_resize){
 			min_redim = parseInt(edit_min_size.text)
 			max_redim = parseInt(edit_max_size.text)
-			random_two_factor("resize",min_redim,max_redim)
+			script += random_two_factor("resize",min_redim,max_redim)
 		}
 		else if(tab_selectionnee == tab_stroke_weight){
 			min_ep = parseInt(edit_min_width.text)
 			max_ep = parseInt(edit_max_width.text)
-			random_two_factor("stroke_weight",min_ep,max_ep,0)
+			script += random_two_factor("stroke_weight",min_ep,max_ep,0)
 		}
 		else if(tab_selectionnee == tab_opacity){
 			min_op = parseInt(edit_min_opacity.text)
 			max_op = parseInt(edit_max_opacity.text)
-			random_two_factor("opacity",min_op,max_op,0,100)
+			script += random_two_factor("opacity",min_op,max_op,0,100)
 		}
 		else if(tab_selectionnee == tab_position){
 			min_x = parseInt(edit_min_width1.text)
 			max_x = parseInt(edit_max_width1.text)
 			min_y = parseInt(edit_min_width2.text)
 			max_y = parseInt(edit_max_width2.text)
-			random_translation(min_x,max_x,min_y,max_y)
+			script += random_translation(min_x,max_x,min_y,max_y)
 		}
 		else if(tab_selectionnee == tab_selection){
 			pourcentage = parseInt(edit_selection.text)
-			random_selection(pourcentage)
+			script += random_selection(pourcentage)
 		}
 		else if(tab_selectionnee == tab_ordre){
-			random_order()
+			script += random_order()
 		}
 		else if(MySelection instanceof Array){
 			if(tab_selectionnee == tab_fill_colour){
-				random_color("fill")
+				script += random_color("fill")
 			} else if(tab_selectionnee == tab_stroke_colour){
-				random_color("stroke")
+				script += random_color("stroke")
 			}
 		}
-		app.redraw()
+
+		bt.body = script + "\n app.redraw();";
+    	bt.send();
 	})
 	
 	palette.show();
