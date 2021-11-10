@@ -1,24 +1,31 @@
-# Aleatoiriseur
+# Illustrator Scripts
 
-A plugin that randomize things for Adobe Illustrator 
+Here are all my scripts for Adobe Illustrator.
+
+## How to use a script ?
+
+* Download the raw code of the script, and save it to `C:\Program Files\Adobe\Adobe Illustrator 2021\Presets\[lang_LANG]\Scripts\`
+* Re open Illustrator, make a selection of shapes (not grouped) and go to `file > script > aléatoiriseur`. A dialog will pop up allowing you to interact with the script.
 
 ------------------
 
-## How to use it ?
+## Aléatoiriseur
 
-* Download the raw code of the script, and save it to `C:\Program Files\Adobe\Adobe Illustrator 2021\Presets\[lang_LANG]\Scripts\`
-* Re open Illustrator, make a selection of shapes (not grouped) and go to `file > script > aleatoiriseur`. A dialog will pop up allowing you to interact with the script.
+A plugin that randomize things for Adobe Illustrator 
 
-## To Do
+### To Do
 
-* Convert it to a panel instead of a popup.
 * Keep the swatch selected when using a random color in a swatch.
 * Make it able to explore groups.
-* Make the cancel button a cancel button (not just a close-window button)
 
-Fell free to contribute to this project ! I'll keep things updated on the main branch.
+### Changelog
 
-## V1.1
+#### V1.2 - 10/11/2021
+* New UI element allowing the user to interact with his document despite having the script opened
+* Random Selection fixed
+* Close button
+
+#### V1.1 - 08/11/2021
 * Better UI
 * Random Selection fixed
 * Function simplification
