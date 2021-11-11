@@ -20,6 +20,12 @@ A plugin that randomize things for Adobe Illustrator
 
 ### Changelog
 
+#### V1.3 - 11/11/2021
+* Added step option to define the step of the random function for stroke wieght, scale, position, rotation and opacity.
+* Added Color blend randomization 
+* Added uniform, horizontal or vertical scaling
+* Improved UI
+
 #### V1.2 - 10/11/2021
 * New UI element allowing the user to interact with his document despite having the script opened
 * Random Selection fixed
