@@ -31,7 +31,7 @@ function random_color(type){
 	return script
 }
 
-function random_two_factor(type, minimum, maximum, min_minimum, max_maximum){
+function random_two_factors(type, minimum, maximum, step, min_minimum, max_maximum){
 if(minimum > maximum){
 		temp = minimum;
 		minimum = maximum;
@@ -45,280 +45,422 @@ if(minimum > maximum){
 	}
 
 	var script = 
-'type = "'+type+'"\n'+
-'for (var i = 0; i < MySelection.length; i++){\n'+
-'	SelectedItem = MySelection[i];\n'+
-'	nbr_random = nombre_random('+minimum+', '+maximum+');\n'+
-'		if(type == "opacity"){\n'+
-'		SelectedItem.opacity = nombre_random(nbr_random,nbr_random);\n'+
-'	} else if (type == "resize"){\n'+
-'		SelectedItem.resize(nbr_random, nbr_random);\n'+
-'	} else if (type == "rotation"){\n'+
-'		SelectedItem.rotate(nbr_random, nbr_random);\n'+
-'	} else if (type == "stroke_weight"){\n'+
-'		SelectedItem.strokeWidth = nbr_random;\n'+
-'	}\n'+
-'}\n'
+	'type = "'+type+'"\n'+
+	'for (var i = 0; i < MySelection.length; i++){\n'+
+	'	SelectedItem = MySelection[i];\n'+
+	'	nbr_random = nombre_random('+minimum+', '+maximum+', '+step+');\n'+
+	'	if(type == "opacity"){\n'+
+	'		SelectedItem.opacity = nbr_random;\n'+
+	'	} else if (type == "rotation"){\n'+
+	'		SelectedItem.rotate(nbr_random, nbr_random);\n'+
+	'	} else if (type == "stroke_weight"){\n'+
+	'		SelectedItem.strokeWidth = nbr_random;\n'+
+	'	}\n'+
+	'}\n'
 	return script
 }
 
-function random_translation(x_min,x_max,y_min,y_max){
-	var script = 'if(x_min > x_max){\n'+
-'	temp = x_min;\n'+
-'	x_min = x_max;\n'+
-'	x_max = temp;\n'+
-'}\n'+
-'if(y_min > y_max){\n'+
-'	temp = y_min;\n'+
-'	y_min = y_max;\n'+
-'	y_max = temp;\n'+
-'}\n'+
+function random_4_factors(type, x_min, x_max, y_min, y_max, step){
+	if(x_min > x_max){
+		temp = x_min;
+		x_min = x_max;
+		x_max = temp;
+	}
+	if(y_min > y_max){
+		temp = y_min;
+		y_min = y_max;
+		y_max = temp;
+	}
 
-'for(i=0; i<MySelection.length; i++){\n'+
-'	SelectedItem = MySelection[i];\n'+
-'	translation_x = nombre_random(x_min,x_max);\n'+
-'	translation_y = nombre_random(y_min,y_max);\n'+
-'	SelectedItem.translate(translation_x,translation_y);\n'+
-'}'
+	var script = 'type = "'+type+'"\n'+
+	'step = '+step+'\n'+
+	'for(i=0; i<MySelection.length; i++){\n'+
+	'	SelectedItem = MySelection[i];\n'+
+	'	x = nombre_random('+x_min+','+x_max+', step);\n'+
+	'	y = nombre_random('+y_min+','+y_max+', step);\n'+
+	'	if(type == "position"){\n'+
+	'		SelectedItem.translate(x,y);\n'+
+	'	} else if (type == "scale"){\n'+
+	'		SelectedItem.resize(x,y);\n'+
+	'	}\n'+
+	'}'
 	return script
 }
 
 function random_order(){
 	var script = 'for(i=0; i<MySelection.length; i++){\n'+
-'	SelectedItem = MySelection[i];\n'+
-'	indice = Math.floor(Math.random()*(MySelection.length - i));\n'+
-'	MySelection[indice].zOrder(ZOrderMethod.SENDTOBACK);\n'+
-'}\n'
+	'	SelectedItem = MySelection[i];\n'+
+	'	indice = Math.floor(Math.random()*(MySelection.length - i));\n'+
+	'	MySelection[indice].zOrder(ZOrderMethod.SENDTOBACK);\n'+
+	'}\n'
 	return script
 }
 
 function random_selection(pourcentage){
 	var script = 'var nbr_items_to_deselect = Math.round(MySelection.length * (1 - '+pourcentage+' / 100));\n'+
-'var items_to_deselect = [];\n'+
-'for (var i = 0; i < MySelection.length; i++) {\n'+
-'	items_to_deselect.push(i);\n'+
-'}\n'+
-'while (items_to_deselect.length > nbr_items_to_deselect){\n'+
-'	index = Math.floor(Math.random()*(items_to_deselect.length));\n'+
-'	items_to_deselect.splice(index, 1);\n'+
-'}\n'+
-'for(i = items_to_deselect.length-1; i >= 0 ; i --){\n'+
-'	MySelection[items_to_deselect[i]].selected = false;\n'+
-'}\n'
+	'var items_to_deselect = [];\n'+
+	'for (var i = 0; i < MySelection.length; i++) {\n'+
+	'	items_to_deselect.push(i);\n'+
+	'}\n'+
+	'while (items_to_deselect.length > nbr_items_to_deselect){\n'+
+	'	index = Math.floor(Math.random()*(items_to_deselect.length));\n'+
+	'	items_to_deselect.splice(index, 1);\n'+
+	'}\n'+
+	'for(i = items_to_deselect.length-1; i >= 0 ; i --){\n'+
+	'	MySelection[items_to_deselect[i]].selected = false;\n'+
+	'}\n'
+	return script
+}
+
+function random_blendmode(blendmodeList){
+	var script = 'blendmodeList = ['+ blendmodeList.join(",") +']\n'+
+	'for(i=0; i<MySelection.length; i++){\n'+
+	'	SelectedItem = MySelection[i];\n'+
+	'	indice = Math.floor(Math.random()*(blendmodeList.length));\n'+
+	'	MySelection[i].blendingMode = blendmodeList[indice];\n'+
+	'}\n'
 	return script
 }
 
 
-var dialogUI = (function () {
-
+var palette = (function () {
+  
 	// PALETTE
 	// =======
 	var palette = new Window("palette", undefined, undefined, {closeButton: true, resizeable: true}); 
-	palette.text = "aleatoiriseur"; 
-	palette.alignChildren = ["center","top"]; 
-	palette.spacing = 10; 
-	palette.margins = 16; 
-
+		palette.text = "aléatoiriseur"; 
+		palette.orientation = "column"; 
+		palette.alignChildren = ["center","top"]; 
+		palette.spacing = 10; 
+		palette.margins = 15; 
+  
 	// TABPANEL
 	// ========
 	var tabpanel = palette.add("group", undefined, undefined, {name: "tabpanel"}); 
-	tabpanel.alignChildren = ["left","fill"]; 
-	var tabpanel_nav = tabpanel.add ("listbox", undefined, ['fill color','stroke color','stroke weight','resize','position','rotation','opacity','selection','ordre']); 
+		tabpanel.alignChildren = ["left","fill"]; 
+	var tabpanel_nav = tabpanel.add ("listbox", undefined, ['fill color','stroke color','stroke weight','scale','position','rotation','opacity','selection','ordre','blend mode']); 
 	var tabpanel_innerwrap = tabpanel.add("group") 
-	tabpanel_innerwrap.alignment = ["fill","fill"]; 
-	tabpanel_innerwrap.orientation = ["stack"]; 
-
+		tabpanel_innerwrap.alignment = ["fill","fill"]; 
+		tabpanel_innerwrap.orientation = ["stack"]; 
+  
 	// TAB_FILL_COLOUR
 	// ===============
 	var tab_fill_colour = tabpanel_innerwrap.add("group", undefined, {name: "tab_fill_colour"}); 
-	tab_fill_colour.text = "fill color";
-
-	var statictext1 = tab_fill_colour.add("statictext", undefined, undefined, {name: "statictext1"}); 
-	statictext1.text = "select a colour swatch"; 
-	statictext1.justify = "center"; 
-
+		tab_fill_colour.text = "fill color";
+  
+	var color_swatch = tab_fill_colour.add("statictext", undefined, undefined, {name: "color_swatch"}); 
+		color_swatch.text = "select a colour swatch"; 
+		color_swatch.justify = "center"; 
+  
 	// TAB_STROKE_COLOUR
 	// =================
 	var tab_stroke_colour = tabpanel_innerwrap.add("group", undefined, {name: "tab_stroke_colour"}); 
-	tab_stroke_colour.text = "stroke color";
-
-	var statictext2 = tab_stroke_colour.add("statictext", undefined, undefined, {name: "statictext2"}); 
-	statictext2.text = "select a colour swatch"; 
-	statictext2.justify = "center"; 
-
+		tab_stroke_colour.text = "stroke color";
+  
+	var color_swatch1 = tab_stroke_colour.add("statictext", undefined, undefined, {name: "color_swatch1"}); 
+		color_swatch1.text = "select a colour swatch"; 
+		color_swatch1.justify = "center"; 
+  
 	// TAB_STROKE_WEIGHT
 	// =================
 	var tab_stroke_weight = tabpanel_innerwrap.add("group", undefined, {name: "tab_stroke_weight"}); 
-	tab_stroke_weight.text = "stroke weight";
-
-	var group_min_width = tab_stroke_weight.add("group", undefined, {name: "group_min_width"});
-
-	var text_min_width = group_min_width.add("statictext", undefined, undefined, {name: "text_min_width"}); 
-	text_min_width.text = "minimum width (px) : "; 
-
-	var edit_min_width = group_min_width.add('edittext {properties: {name: "edit_min_width"}}'); 
-	edit_min_width.preferredSize.width = 50; 
-
-	var group_max_width = tab_stroke_weight.add("group", undefined, {name: "group_max_width"});
-
-	var text_max_width = group_max_width.add("statictext", undefined, undefined, {name: "text_max_width"}); 
-	text_max_width.text = "maximum width (px) : "; 
-
-	var edit_max_width = group_max_width.add('edittext {properties: {name: "edit_max_width"}}'); 
-	edit_max_width.preferredSize.width = 50; 
-
-	// TAB_RESIZE
-	// ==========
-	var tab_resize = tabpanel_innerwrap.add("group", undefined, {name: "tab_resize"}); 
-	tab_resize.text = "resize";
-
-	var group_min_size = tab_resize.add("group", undefined, {name: "group_min_size"});
-
-	var text_min_size = group_min_size.add("statictext", undefined, undefined, {name: "text_min_size"}); 
-	text_min_size.text = "minimum (%) :"; 
-
-	var edit_min_size = group_min_size.add('edittext {properties: {name: "edit_min_size"}}'); 
-	edit_min_size.preferredSize.width = 50; 
-
-	var group_max_size = tab_resize.add("group", undefined, {name: "group_max_size"});
-
-	var text_max_size = group_max_size.add("statictext", undefined, undefined, {name: "text_max_size"}); 
-	text_max_size.text = "maximum (%) : "; 
-
-	var edit_max_size = group_max_size.add('edittext {properties: {name: "edit_max_size"}}'); 
-	edit_max_size.preferredSize.width = 50; 
-
+		tab_stroke_weight.text = "stroke weight";
+  
+	// PANEL1
+	// ======
+	var panel1 = tab_stroke_weight.add("panel", undefined, undefined, {name: "panel1"}); 
+		panel1.text = "weight";
+  
+	var text_min_weight = panel1.add("statictext", undefined, undefined, {name: "text_min_weight"}); 
+		text_min_weight.text = "min (px) : "; 
+  
+	var edit_min_weight = panel1.add('edittext {properties: {name: "edit_min_weight"}}'); 
+		edit_min_weight.preferredSize.width = 50; 
+  
+	var text_max_weight = panel1.add("statictext", undefined, undefined, {name: "text_max_weight"}); 
+		text_max_weight.text = "max (px) : "; 
+  
+	var edit_max_weight = panel1.add('edittext {properties: {name: "edit_max_weight"}}'); 
+		edit_max_weight.preferredSize.width = 50; 
+  
+	// GROUP1
+	// ======
+	var group1 = tab_stroke_weight.add("group", undefined, {name: "group1"}); 
+		group1.orientation = "row";
+  
+	// var checkbox_strokes = group1.add("checkbox", undefined, undefined, {name: "checkbox_strokes"}); 
+	// 	checkbox_strokes.enabled = false; 
+	// 	checkbox_strokes.text = "Only apply to items already stroked"; 
+  
+	// TAB_SCALE
+	// =========
+	var tab_scale = tabpanel_innerwrap.add("group", undefined, {name: "tab_scale"}); 
+		tab_scale.text = "scale";
+  
+	// PANEL_UNIFORM
+	// =============
+	var panel_uniform = tab_scale.add("panel", undefined, undefined, {name: "panel_uniform"}); 
+		panel_uniform.text = "uniform";
+  
+	var text_min_uni_scale = panel_uniform.add("statictext", undefined, undefined, {name: "text_min_uni_scale"}); 
+		text_min_uni_scale.text = "min (%) : "; 
+  
+	var edit_min_uni_scale = panel_uniform.add('edittext {properties: {name: "edit_min_uni_scale"}}'); 
+		edit_min_uni_scale.preferredSize.width = 50; 
+  
+	var text_max_uni_scale = panel_uniform.add("statictext", undefined, undefined, {name: "text_max_uni_scale"}); 
+		text_max_uni_scale.text = "max (%) : "; 
+  
+	var edit_max_uni_scale = panel_uniform.add('edittext {properties: {name: "edit_max_uni_scale"}}'); 
+		edit_max_uni_scale.preferredSize.width = 50; 
+  
+	// TAB_SCALE
+	// =========
+	var checkbox_uniform = tab_scale.add("checkbox", undefined, undefined, {name: "checkbox_uniform"}); 
+		checkbox_uniform.text = "uniform"; 
+		checkbox_uniform.value = true; 
+  
+	// GROUP2
+	// ======
+	var group2 = tab_scale.add("group", undefined, {name: "group2"}); 
+		group2.orientation = "row";
+  
+	// PANEL_HORIZONTAL
+	// ================
+	var panel_horizontal = tab_scale.add("panel", undefined, undefined, {name: "panel_horizontal"}); 
+		panel_horizontal.text = "horizontal";
+  
+	var text_min_x_scale = panel_horizontal.add("statictext", undefined, undefined, {name: "text_min_x_scale"}); 
+		text_min_x_scale.text = "min (%) : "; 
+  
+	var edit_min_x_scale = panel_horizontal.add('edittext {properties: {name: "edit_min_x_scale"}}'); 
+		edit_min_x_scale.preferredSize.width = 50; 
+  
+	var text_max_x_scale = panel_horizontal.add("statictext", undefined, undefined, {name: "text_max_x_scale"}); 
+		text_max_x_scale.text = "max (%) : "; 
+  
+	var edit_max_x_scale = panel_horizontal.add('edittext {properties: {name: "edit_max_x_scale"}}'); 
+		edit_max_x_scale.preferredSize.width = 50; 
+  
+	// PANEL_VERTICAL
+	// ==============
+	var panel_vertical = tab_scale.add("panel", undefined, undefined, {name: "panel_vertical"});
+	panel_vertical.text = "vertical";
+  
+	var text_min_y_scale = panel_vertical.add("statictext", undefined, undefined, {name: "text_min_y_scale"}); 
+		text_min_y_scale.text = "min (%) : "; 
+  
+	var edit_min_y_scale = panel_vertical.add('edittext {properties: {name: "edit_min_y_scale"}}'); 
+		edit_min_y_scale.preferredSize.width = 50; 
+  
+	var text_max_y_scale = panel_vertical.add("statictext", undefined, undefined, {name: "text_max_y_scale"}); 
+		text_max_y_scale.text = "max (%) : "; 
+  
+	var edit_max_y_scale = panel_vertical.add('edittext {properties: {name: "edit_max_y_scale"}}'); 
+		edit_max_y_scale.preferredSize.width = 50; 
+  
 	// TAB_POSITION
 	// ============
 	var tab_position = tabpanel_innerwrap.add("group", undefined, {name: "tab_position"}); 
-	tab_position.text = "position";
+		tab_position.text = "position";
+  
+	// PANEL_UNIFORM1
+	// ==============
+	var panel_uniform1 = tab_position.add("panel", undefined, undefined, {name: "panel_uniform1"}); 
+		panel_uniform1.text = "uniform";
+  
+	var text_min_uni_position = panel_uniform1.add("statictext", undefined, undefined, {name: "text_min_uni_position"}); 
+		text_min_uni_position.text = "min (px) : "; 
+  
+	var edit_min_uni_position = panel_uniform1.add('edittext {properties: {name: "edit_min_uni_position"}}'); 
+		edit_min_uni_position.preferredSize.width = 50; 
+  
+	var text_max_uni_position = panel_uniform1.add("statictext", undefined, undefined, {name: "text_max_uni_position"}); 
+		text_max_uni_position.text = "max (px) : "; 
+  
+	var edit_max_uni_position = panel_uniform1.add('edittext {properties: {name: "edit_max_uni_position"}}'); 
+		edit_max_uni_position.preferredSize.width = 50; 
+  
+	// TAB_POSITION
+	// ============
+	var checkbox_uniform1 = tab_position.add("checkbox", undefined, undefined, {name: "checkbox_uniform1"}); 
+		checkbox_uniform1.text = "uniform"; 
+		checkbox_uniform1.value = true; 
 
-	var panel = tab_position.add("panel", undefined, undefined, {name: "panel"}); 
-	panel.text = "horizontal"; 
-	panel.orientation = "column"; 
-	panel.alignChildren = ["left","top"]; 
-	panel.spacing = 10; 
-	panel.margins = 10; 
-
-	var group_horizontal = panel.add("group", undefined, {name: "group_horizontal"});
-
-	var text_min_width1 = group_horizontal.add("statictext", undefined, undefined, {name: "text_min_width1"}); 
-	text_min_width1.text = "min (px) : "; 
-
-	var edit_min_width1 = group_horizontal.add('edittext {properties: {name: "edit_min_width1"}}'); 
-	edit_min_width1.preferredSize.width = 50; 
-
-	var text_max_width1 = group_horizontal.add("statictext", undefined, undefined, {name: "text_max_width1"}); 
-	text_max_width1.text = "max (px) : "; 
-
-	var edit_max_width1 = group_horizontal.add('edittext {properties: {name: "edit_max_width1"}}'); 
-	edit_max_width1.preferredSize.width = 50; 
-
-	var panel1 = tab_position.add("panel", undefined, undefined, {name: "panel1"}); 
-	panel1.text = "vertical"; 
-	panel1.orientation = "column"; 
-	panel1.alignChildren = ["left","top"]; 
-	panel1.spacing = 10; 
-	panel1.margins = 10; 
-
-	var group_vertical = panel1.add("group", undefined, {name: "group_vertical"});
-
-	var text_min_width1 = group_vertical.add("statictext", undefined, undefined, {name: "text_min_width1"}); 
-	text_min_width1.text = "min (px) : "; 
-
-	var edit_min_width2 = group_vertical.add('edittext {properties: {name: "edit_min_width2"}}'); 
-	edit_min_width2.preferredSize.width = 50; 
-
-	var text_max_width2 = group_vertical.add("statictext", undefined, undefined, {name: "text_max_width2"}); 
-	text_max_width2.text = "max (px) : "; 
-
-	var edit_max_width2 = group_vertical.add('edittext {properties: {name: "edit_max_width2"}}'); 
-	edit_max_width2.preferredSize.width = 50; 
-
+	// GROUP3
+	// ======
+	var group3 = tab_position.add("group", undefined, {name: "group3"}); 
+		group3.orientation = "row";
+  
+	// PANEL_HORIZONTAL1
+	// =================
+	var panel_horizontal1 = tab_position.add("panel", undefined, undefined, {name: "panel_horizontal1"}); 
+		panel_horizontal1.text = "horizontal";
+  
+	var text_min_x_position = panel_horizontal1.add("statictext", undefined, undefined, {name: "text_min_x_position"}); 
+		text_min_x_position.text = "min (px) : "; 
+  
+	var edit_min_x_position = panel_horizontal1.add('edittext {properties: {name: "edit_min_x_position"}}'); 
+		edit_min_x_position.preferredSize.width = 50; 
+  
+	var text_max_x_position = panel_horizontal1.add("statictext", undefined, undefined, {name: "text_max_x_position"}); 
+		text_max_x_position.text = "max (px) : "; 
+  
+	var edit_max_x_position = panel_horizontal1.add('edittext {properties: {name: "edit_max_x_position"}}'); 
+		edit_max_x_position.preferredSize.width = 50; 
+  
+	// PANEL_VERTICAL1
+	// ===============
+	var panel_vertical1 = tab_position.add("panel", undefined, undefined, {name: "panel_vertical1"}); 
+		panel_vertical1.text = "vertical";
+  
+	var text_min_y_position = panel_vertical1.add("statictext", undefined, undefined, {name: "text_min_y_position"}); 
+		text_min_y_position.text = "min (px) : "; 
+  
+	var edit_min_y_position = panel_vertical1.add('edittext {properties: {name: "edit_min_y_position"}}'); 
+		edit_min_y_position.preferredSize.width = 50; 
+  
+	var text_max_y_position = panel_vertical1.add("statictext", undefined, undefined, {name: "text_max_y_position"}); 
+		text_max_y_position.text = "max (px) : "; 
+  
+	var edit_max_y_position = panel_vertical1.add('edittext {properties: {name: "edit_max_y_position"}}'); 
+		edit_max_y_position.preferredSize.width = 50; 
+  
 	// TAB_ROTATION
 	// ============
 	var tab_rotation = tabpanel_innerwrap.add("group", undefined, {name: "tab_rotation"}); 
-	tab_rotation.text = "rotation";
-
-	var group_min_rot = tab_rotation.add("group", undefined, {name: "group_min_rot"});
-
-	var text_min_deg = group_min_rot.add("statictext", undefined, undefined, {name: "text_min_deg"}); 
-	text_min_deg.text = "minimum (deg) : "; 
-
-	var edit_min_rot = group_min_rot.add('edittext {properties: {name: "edit_min_rot"}}'); 
-	edit_min_rot.preferredSize.width = 50; 
-
-	var group_max_rot = tab_rotation.add("group", undefined, {name: "group_max_rot"}); 
-
-	var text_max_deg = group_max_rot.add("statictext", undefined, undefined, {name: "text_max_deg"}); 
-	text_max_deg.text = "maximum (deg) : "; 
-
-	var edit_max_rot = group_max_rot.add('edittext {properties: {name: "edit_max_rot"}}'); 
-	edit_max_rot.preferredSize.width = 50; 
-
+		tab_rotation.text = "rotation";
+  
+	// PANEL2
+	// ======
+	var panel2 = tab_rotation.add("panel", undefined, undefined, {name: "panel2"}); 
+		panel2.text = "rotation";
+  
+	var text_min_deg = panel2.add("statictext", undefined, undefined, {name: "text_min_deg"}); 
+		text_min_deg.text = "min (deg) : "; 
+  
+	var edit_min_rot = panel2.add('edittext {properties: {name: "edit_min_rot"}}'); 
+		edit_min_rot.preferredSize.width = 50; 
+  
+	var text_max_deg = panel2.add("statictext", undefined, undefined, {name: "text_max_deg"}); 
+		text_max_deg.text = "max (deg) : "; 
+  
+	var edit_max_rot = panel2.add('edittext {properties: {name: "edit_max_rot"}}'); 
+		edit_max_rot.preferredSize.width = 50; 
+  
 	// TAB_OPACITY
 	// ===========
 	var tab_opacity = tabpanel_innerwrap.add("group", undefined, {name: "tab_opacity"}); 
 		tab_opacity.text = "opacity";
-
-	var group_min_opacity = tab_opacity.add("group", undefined, {name: "group_min_opacity"});
-
-	var text_min_opacity = group_min_opacity.add("statictext", undefined, undefined, {name: "text_min_opacity"}); 
-		text_min_opacity.text = "min opacity (%) : "; 
-
-	var edit_min_opacity = group_min_opacity.add('edittext {properties: {name: "edit_min_opacity"}}'); 
+  
+	// PANEL3
+	// ======
+	var panel3 = tab_opacity.add("panel", undefined, undefined, {name: "panel3"}); 
+		panel3.text = "opacity";
+  
+	var text_min_opacity = panel3.add("statictext", undefined, undefined, {name: "text_min_opacity"}); 
+		text_min_opacity.text = "min (%) : "; 
+  
+	var edit_min_opacity = panel3.add('edittext {properties: {name: "edit_min_opacity"}}'); 
 		edit_min_opacity.preferredSize.width = 50; 
-
-	var group_max_opacity = tab_opacity.add("group", undefined, {name: "group_max_opacity"});
-
-	var text_max_opacity = group_max_opacity.add("statictext", undefined, undefined, {name: "text_max_opacity"}); 
-		text_max_opacity.text = "max opacity (%) : "; 
-
-	var edit_max_opacity = group_max_opacity.add('edittext {properties: {name: "edit_max_opacity"}}'); 
+  
+	var text_max_opacity = panel3.add("statictext", undefined, undefined, {name: "text_max_opacity"}); 
+		text_max_opacity.text = "max (%) : "; 
+  
+	var edit_max_opacity = panel3.add('edittext {properties: {name: "edit_max_opacity"}}'); 
 		edit_max_opacity.preferredSize.width = 50; 
-
+  
 	// TAB_SELECTION
 	// =============
 	var tab_selection = tabpanel_innerwrap.add("group", undefined, {name: "tab_selection"}); 
 		tab_selection.text = "selection";
-
+  
+	// GROUP_SELECTION
+	// ===============
 	var group_selection = tab_selection.add("group", undefined, {name: "group_selection"});
-
+  
 	var text_selection = group_selection.add("statictext", undefined, undefined, {name: "text_selection"}); 
 		text_selection.text = "selection to keep (%) : "; 
-
+  
 	var edit_selection = group_selection.add('edittext {properties: {name: "edit_selection"}}'); 
 		edit_selection.preferredSize.width = 50; 
-
+  
 	// TAB_ORDRE
 	// =========
 	var tab_ordre = tabpanel_innerwrap.add("group", undefined, {name: "tab_ordre"}); 
-	tab_ordre.text = "ordre";
+		tab_ordre.text = "ordre";
+  
+	var text_make_selection = tab_ordre.add("statictext", undefined, undefined, {name: "text_make_selection"}); 
+		text_make_selection.text = "make a selection"; 
+  
+	// TAB_BLENDMODE
+	// =============
+	var tab_blendmode = tabpanel_innerwrap.add("group", undefined, {name: "tab_blendmode"});
+		tab_blendmode.text = "blend mode";
+  
+		var statictext1 = tab_blendmode.add("statictext", undefined, undefined, {name: "statictext1"}); 
+		statictext1.text = "use ctrl or shift to select mutiple"; 
 
+	var group_blendmode = tab_blendmode.add("group", undefined, {name: "group_blendmode"}); 
+  
+	var listbox_blendmode_array = ["Normal","Darken","Multiply","Colour burn","Lighten","Screen","Colour dodge"];
+	var listbox_blendmode = group_blendmode.add("listbox", undefined, undefined, {name: "listbox_blendmode", items: listbox_blendmode_array, multiselect: true}); 
+  
+	var listbox_blendmode1_array = ["Overlay","Soft light","Hard light"];
+	var listbox_blendmode1 = group_blendmode.add("listbox", undefined, undefined, {name: "listbox_blendmode1", items: listbox_blendmode1_array, multiselect: true}); 
+	
+	var listbox_blendmode2_array = ["Difference","Exclusion","Hue","Saturation","Colour","Luminosity"]; 
+	var listbox_blendmode2 = group_blendmode.add("listbox", undefined, undefined, {name: "listbox_blendmode2", items: listbox_blendmode2_array, multiselect: true}); 
+  
+
+	// GROUP5
+	// ======
+	var group5 = palette.add("group", undefined, {name: "group5"});
+  
+	// GROUP6
+	// ======
+	var group6 = group5.add("group", undefined, {name: "group6"});
+  
+	var text_step = group6.add("statictext", undefined, undefined, {name: "text_step"}); 
+		text_step.text = "step : "; 
+  
+	var edit_step = group6.add('edittext {justify: "right", properties: {name: "edit_step"}}'); 
+		edit_step.text = "1"; 
+		edit_step.preferredSize.width = 50; 
+  
+	var text_step_unit = group6.add("statictext", undefined, undefined, {name: "step_unit"}); 
+		text_step_unit.text = "px"; 
+		text_step_unit.preferredSize.width = 30;
+  
 	// GROUP_BUTTON
 	// ============
-	var group_button = palette.add("group", undefined, {name: "group_button"});
-
+	var group_button = group5.add("group", undefined, {name: "group_button"}); 
+		group_button.orientation = "row"; 
+		group_button.alignChildren = ["right","bottom"]; 
+		group_button.spacing = 10; 
+		group_button.margins = 0; 
+  
 	var close = group_button.add("button", undefined, undefined, {name: "close"}); 
 	close.text = "close"; 
-
+  
 	var apply = group_button.add("button", undefined, undefined, {name: "apply"}); 
-	apply.text = "apply"; 
+		apply.text = "apply"; 
+  
 
-	var text_make_selection = tab_ordre.add("statictext", undefined, undefined, {name: "text_make_selection"}); 
-    	text_make_selection.text = "make a selection"; 
 
 	// TABPANEL
 	// ========
-	groups = [tab_fill_colour,tab_stroke_colour,tab_stroke_weight,tab_resize,tab_position,tab_rotation,group_min_opacity,group_max_opacity,group_selection,group_max_rot,group_button]; 
-	tabpanel_tabs = [tab_fill_colour,tab_stroke_colour,tab_stroke_weight,tab_resize,tab_position,tab_rotation,tab_opacity,tab_selection,tab_ordre]; 
+	groups_panel = [panel_uniform,panel_horizontal,panel_vertical, panel_uniform1,panel_horizontal1,panel_vertical1,group_selection, group_blendmode,panel1,panel2,panel3,group1,group2,group3,group5,group6]
+	tabpanel_tabs = [tab_fill_colour,tab_stroke_colour,tab_stroke_weight,tab_scale,tab_position,tab_rotation,tab_opacity,tab_selection,tab_ordre,tab_blendmode]; 
+	tabpanel_tabs_step_units = [undefined,undefined,"px","%","px","deg","%",undefined,undefined,undefined]; 
 
-	for (var i = 0; i < groups.length; i++) { 
-		groups[i].orientation = "row"; 
-		groups[i].alignChildren = ["left","center"]; 
-		groups[i].spacing = 10; 
-		groups[i].margins = 0; 
-	} 
+	for (var i = 0; i < groups_panel.length; i++) { 
+		groups_panel[i].orientation = "row"; 
+		groups_panel[i].alignChildren = ["left","center"]; 
+		groups_panel[i].spacing = 10; 
+		groups_panel[i].margins = 10; 
+	}
+	group5.orientation = "column";
 
 	for (var i = 0; i < tabpanel_tabs.length; i++) { 
 		tabpanel_tabs[i].alignment = ["fill","fill"]; 
@@ -326,24 +468,37 @@ var dialogUI = (function () {
 		tabpanel_tabs[i].orientation = "column"; 
 		tabpanel_tabs[i].alignChildren = ["left","top"]; 
 		tabpanel_tabs[i].spacing = 10; 
-		tabpanel_tabs[i].margins = [10,10,10,10]; 
-	} 
+		tabpanel_tabs[i].margins = [15,0,0,0]; 
+	}
 
+	for (var i = 0; i < tabpanel_tabs.length; i++) { 
+	  tabpanel_tabs[i].alignment = ["fill","fill"]; 
+	  tabpanel_tabs[i].visible = false; 
+	} 
+  
 	tabpanel_nav.onChange = showTab_tabpanel; 
-
+  
 	function showTab_tabpanel() { 
-		if ( tabpanel_nav.selection !== null ) { 
-			for (var i = tabpanel_tabs.length-1; i >= 0; i--) { 
-				tabpanel_tabs[i].visible = false; 
-			} 
-			tabpanel_tabs[tabpanel_nav.selection.index].visible = true; 
-			tab_selectionnee = tabpanel_tabs[tabpanel_nav.selection.index];
-		} 
+	  if ( tabpanel_nav.selection !== null ) { 
+		for (var i = tabpanel_tabs.length-1; i >= 0; i--) { 
+		  tabpanel_tabs[i].visible = false; 
+		}
+		index_selected = tabpanel_nav.selection.index
+		tab_selectionnee = tabpanel_tabs[index_selected]
+		tab_selectionnee.visible = true;
+		step_unit = tabpanel_tabs_step_units[index_selected]
+		if (step_unit != undefined){
+			group6.visible = true;
+			text_step_unit.text = step_unit;
+		} else {
+			group6.visible = false;
+		}
+	  } 
 	} 
-
+  
 	tabpanel_nav.selection = 0; 
-	showTab_tabpanel() 
-
+	showTab_tabpanel();
+  
 	close.addEventListener("click",function(){
 		palette.close();
 	});
@@ -354,56 +509,88 @@ var dialogUI = (function () {
 
 		script = "MyDoc = app.activeDocument;\n"+
 		"MySelection = MyDoc.selection;\n\n"+
-		"function nombre_random(min,max){\n"+
-		"	return  Math.floor(Math.random() * (max - min + 1)) + min;\n"+
+		"function nombre_random(min, max, step){\n"+
+		"	return  Math.floor(Math.random() * (max - min + 1) / step) * step + min;\n"+
 		"}\n\n"
 
-		if(tab_selectionnee == tab_rotation){
-			min_rotation = parseInt(edit_min_rot.text)
-			max_rotation = parseInt(edit_max_rot.text)
-			script += random_two_factor("rotation",min_rotation,max_rotation)
+		step = parseFloat(edit_step.text)
+
+		if(tab_selectionnee == tab_fill_colour){
+			script += random_color("fill")
 		}
-		else if(tab_selectionnee == tab_resize){
-			min_redim = parseInt(edit_min_size.text)
-			max_redim = parseInt(edit_max_size.text)
-			script += random_two_factor("resize",min_redim,max_redim)
+		else if(tab_selectionnee == tab_stroke_colour){
+			script += random_color("stroke")
 		}
 		else if(tab_selectionnee == tab_stroke_weight){
-			min_ep = parseInt(edit_min_width.text)
-			max_ep = parseInt(edit_max_width.text)
-			script += random_two_factor("stroke_weight",min_ep,max_ep,0)
+			min_ep = parseFloat(edit_min_weight.text)
+			max_ep = parseFloat(edit_max_weight.text)
+			script += random_two_factors("stroke_weight",min_ep,max_ep,step,0)
 		}
-		else if(tab_selectionnee == tab_opacity){
-			min_op = parseInt(edit_min_opacity.text)
-			max_op = parseInt(edit_max_opacity.text)
-			script += random_two_factor("opacity",min_op,max_op,0,100)
+		else if(tab_selectionnee == tab_scale){
+			if (checkbox_uniform.value == true){
+				min_x = parseFloat(edit_min_uni_scale.text);
+				max_x = parseFloat(edit_max_uni_scale.text);
+				min_y = min_x;
+				max_y = max_x;
+			} else {
+				min_x = parseFloat(edit_min_x_scale.text)
+				max_x = parseFloat(edit_max_x_scale.text)
+				min_y = parseFloat(edit_min_y_scale.text)
+				max_y = parseFloat(edit_max_y_scale.text)
+			}
+			script += random_4_factors("scale",min_x,max_x,min_y,max_y,step)
 		}
 		else if(tab_selectionnee == tab_position){
-			min_x = parseInt(edit_min_width1.text)
-			max_x = parseInt(edit_max_width1.text)
-			min_y = parseInt(edit_min_width2.text)
-			max_y = parseInt(edit_max_width2.text)
-			script += random_translation(min_x,max_x,min_y,max_y)
+			if (checkbox_uniform1.value == true){
+				min_x = parseFloat(edit_min_uni_position.text);
+				max_x = parseFloat(edit_max_uni_position.text);
+				min_y = min_x;
+				max_y = max_x;
+			} else {
+				min_x = parseFloat(edit_min_x_position.text)
+				max_x = parseFloat(edit_max_x_position.text)
+				min_y = parseFloat(edit_min_y_position.text)
+				max_y = parseFloat(edit_max_y_position.text)
+			}
+			script += random_4_factors("position",min_x,max_x,min_y,max_y,step)
+		}
+		else if(tab_selectionnee == tab_rotation){
+			min_rotation = parseFloat(edit_min_rot.text)
+			max_rotation = parseFloat(edit_max_rot.text)
+			script += random_two_factors("rotation",min_rotation,max_rotation,step)
+		}
+		else if(tab_selectionnee == tab_opacity){
+			min_op = parseFloat(edit_min_opacity.text)
+			max_op = parseFloat(edit_max_opacity.text)
+			script += random_two_factors("opacity",min_op,max_op,step,0,100)
 		}
 		else if(tab_selectionnee == tab_selection){
-			pourcentage = parseInt(edit_selection.text)
+			pourcentage = parseFloat(edit_selection.text)
 			script += random_selection(pourcentage)
 		}
 		else if(tab_selectionnee == tab_ordre){
 			script += random_order()
 		}
-		else if(MySelection instanceof Array){
-			if(tab_selectionnee == tab_fill_colour){
-				script += random_color("fill")
-			} else if(tab_selectionnee == tab_stroke_colour){
-				script += random_color("stroke")
+		else if(tab_selectionnee == tab_blendmode){
+			real_blendmode_array = {"Normal":BlendModes.NORMAL,"Darken":BlendModes.DARKEN,"Multiply":BlendModes.MULTIPLY,"Colour burn":BlendModes.COLORBURN,"Lighten":BlendModes.LIGHTEN,"Screen":BlendModes.SCREEN,"Colour dodge":BlendModes.COLORDODGE,"Overlay":BlendModes.OVERLAY,"Soft light":BlendModes.SOFTLIGHT,"Hard light":BlendModes.HARDLIGHT,"Difference":BlendModes.DIFFERENCE,"Exclusion":BlendModes.EXCLUSION,"Hue":BlendModes.HUE,"Saturation":BlendModes.SATURATIONBLEND,"Colour":BlendModes.COLORBLEND,"Luminosity":BlendModes.LUMINOSITY};
+			selected_blendmodes = [listbox_blendmode.selection,listbox_blendmode1.selection,listbox_blendmode2.selection];
+			blendmode_objects = [];
+			for (i = 0; i<selected_blendmodes.length; i++) {
+				if (selected_blendmodes[i] != null) {
+					for (ii = 0; ii<selected_blendmodes[i].length; ii++) {
+						blendmode_objects.push(real_blendmode_array[selected_blendmodes[i][ii]]);
+					}
+				}
 			}
+			script += random_blendmode(blendmode_objects);
 		}
 
 		bt.body = script + "\n app.redraw();";
     	bt.send();
 	})
-	
-	palette.show();
 
-}());
+	palette.show();
+  
+	return palette;
+  
+  }());
