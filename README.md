@@ -4,16 +4,20 @@ Here are all my scripts for Adobe Illustrator.
 
 ## How to use a script ?
 
-* Download the raw code of the script, and save it to `C:\Program Files\Adobe\Adobe Illustrator 2021\Presets\[lang_LANG]\Scripts\`
+* Download the .js code of the script :
+    * Left click to .js file.
+    * Click on the raw button.
+    * Right click and save it to `C:\Program Files\Adobe\Adobe Illustrator 2021\Presets\[lang_LANG]\Scripts\`.
 * Re open Illustrator, make a selection of shapes (not grouped) and go to `file > script > aléatoiriseur`. A dialog will pop up allowing you to interact with the script.
 
 ------------------
 
 ## Aléatoiriseur
 
-![banner](pictures/random_2.png)
+A plugin that randomize things for Adobe Illustrator.
+Open the script, make a selection, select one property to randomize, and press apply !
 
-A plugin that randomize things for Adobe Illustrator 
+![banner](pictures/random_3.jpg)
 
 ### To Do
 
@@ -21,6 +25,12 @@ A plugin that randomize things for Adobe Illustrator
 * Make it able to explore groups.
 
 ### Changelog
+
+#### V1.4 - 17/11/2021
+* Added color range for fill and stroke color !
+* Added default parameters for everything
+* Optimised random selection
+* Deleted the blend mode selected by default
 
 #### V1.3 - 11/11/2021
 * Added step option to define the step of the random function for stroke wieght, scale, position, rotation and opacity.
