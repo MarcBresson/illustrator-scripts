@@ -5,9 +5,9 @@ Here are all my scripts for Adobe Illustrator.
 ## How to use a script ?
 
 * Download the .js code of the script :
-    * Left click to .js file.
+    * Left click on the .js file.
     * Click on the raw button.
-    * Right click and save it to `C:\Program Files\Adobe\Adobe Illustrator 2021\Presets\[lang_LANG]\Scripts\`.
+    * Right click anywhere and save it to `C:\Program Files\Adobe\Adobe Illustrator [version]\Presets\[lang_LANG]\Scripts\`.
 * Re open Illustrator, make a selection of shapes (not grouped) and go to `file > script > aléatoiriseur`. A dialog will pop up allowing you to interact with the script.
 
 ------------------
