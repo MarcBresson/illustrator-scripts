@@ -14,7 +14,7 @@ Here are all my scripts for Adobe Illustrator.
 
 ## Aléatoiriseur
 
-![banner](pictures/example.png)
+![UI](pictures/UI.png)
 
 A plugin that randomize things for Adobe Illustrator.
 Open the script, make a selection, select one property to randomize, and press apply !
