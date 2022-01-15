@@ -14,8 +14,6 @@ Here are all my scripts for Adobe Illustrator.
 
 ## Aléatoiriseur
 
-![UI](pictures/UI.png)
-
 A plugin that randomize things for Adobe Illustrator.
 Open the script, make a selection, select one property to randomize, and press apply !
 
@@ -51,3 +49,5 @@ Open the script, make a selection, select one property to randomize, and press a
 * Function simplification
 * Translated everything to english
 * Cancel Button closes the dialog
+
+![UI](pictures/UI.png)
